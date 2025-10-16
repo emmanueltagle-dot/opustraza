@@ -20,17 +20,6 @@
       overflow-x: hidden;
     }
 
-    /* Animación base para secciones */
-    .animate {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .animate.appear {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
     .hero {
       text-align: center;
       max-width: 800px;
@@ -45,8 +34,6 @@
       letter-spacing: -0.5px;
       position: relative;
       display: inline-block;
-      opacity: 0;
-      animation: fadeIn 1s ease-out forwards;
     }
     .hero h1::after {
       content: '';
@@ -59,21 +46,20 @@
       background: var(--accent);
       animation: drawLine 1s ease-out 0.4s forwards;
     }
+    @keyframes drawLine {
+      to { width: 60%; }
+    }
     .hero .tagline {
       font-family: 'Lato', sans-serif;
       font-style: italic;
       font-size: 1.4rem;
       color: #444;
       margin: 0.5rem 0 1.5rem;
-      opacity: 0;
-      animation: fadeIn 1s ease-out 0.6s forwards;
     }
     .hero .description {
       font-size: 1.1rem;
       margin: 1rem 0 2rem;
       color: #222;
-      opacity: 0;
-      animation: fadeIn 1s ease-out 0.8s forwards;
     }
     .cta-button {
       display: inline-block;
@@ -87,8 +73,6 @@
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      opacity: 0;
-      animation: fadeIn 1s ease-out 1s forwards;
     }
     .cta-button:hover {
       background-color: #333;
@@ -98,8 +82,6 @@
 
     nav {
       margin: 2rem 0;
-      opacity: 0;
-      animation: fadeIn 1s ease-out 1.2s forwards;
     }
     nav a {
       color: var(--accent);
@@ -202,13 +184,6 @@
       font-weight: 600;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    @keyframes drawLine {
-      to { width: 60%; }
-    }
-
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.5rem; }
       .hero .tagline { font-size: 1.2rem; }
@@ -233,7 +208,7 @@
     </nav>
   </header>
 
-  <section id="clients" class="animate">
+  <section id="clients">
     <h2>Clients</h2>
     <div style="text-align: center; max-width: 700px; margin: 0 auto; font-size: 1.05rem;">
       <p>I have collaborated with publishers on illustration, graphic narrative, and sequential art projects.</p>
@@ -248,14 +223,56 @@
     </div>
   </section>
 
-  <section id="portfolio" class="animate">
+  <section id="portfolio">
     <h2>Portfolio</h2>
     <div class="portfolio-grid" id="portfolio-container">
-      <!-- Galería generada automáticamente -->
+      <!-- Galería manual -->
+      <div class="work" data-src="img/1.jpg"><img src="img/1.jpg" alt="Work 1"></div>
+      <div class="work" data-src="img/2.jpg"><img src="img/2.jpg" alt="Work 2"></div>
+      <div class="work" data-src="img/3.jpg"><img src="img/3.jpg" alt="Work 3"></div>
+      <div class="work" data-src="img/4.jpg"><img src="img/4.jpg" alt="Work 4"></div>
+      <div class="work" data-src="img/5.jpg"><img src="img/5.jpg" alt="Work 5"></div>
+      <div class="work" data-src="img/6.jpg"><img src="img/6.jpg" alt="Work 6"></div>
+      <div class="work" data-src="img/7.jpg"><img src="img/7.jpg" alt="Work 7"></div>
+      <div class="work" data-src="img/8.jpg"><img src="img/8.jpg" alt="Work 8"></div>
+      <div class="work" data-src="img/9.jpg"><img src="img/9.jpg" alt="Work 9"></div>
+      <div class="work" data-src="img/10.jpg"><img src="img/10.jpg" alt="Work 10"></div>
+      <div class="work" data-src="img/11.jpg"><img src="img/11.jpg" alt="Work 11"></div>
+      <div class="work" data-src="img/12.jpg"><img src="img/12.jpg" alt="Work 12"></div>
+      <div class="work" data-src="img/13.jpg"><img src="img/13.jpg" alt="Work 13"></div>
+      <div class="work" data-src="img/14.jpg"><img src="img/14.jpg" alt="Work 14"></div>
+      <div class="work" data-src="img/15.jpg"><img src="img/15.jpg" alt="Work 15"></div>
+      <div class="work" data-src="img/16.jpg"><img src="img/16.jpg" alt="Work 16"></div>
+      <div class="work" data-src="img/17.jpg"><img src="img/17.jpg" alt="Work 17"></div>
+      <div class="work" data-src="img/18.jpg"><img src="img/18.jpg" alt="Work 18"></div>
+      <div class="work" data-src="img/19.jpg"><img src="img/19.jpg" alt="Work 19"></div>
+      <div class="work" data-src="img/20.jpg"><img src="img/20.jpg" alt="Work 20"></div>
+      <div class="work" data-src="img/21.jpg"><img src="img/21.jpg" alt="Work 21"></div>
+      <div class="work" data-src="img/22.jpg"><img src="img/22.jpg" alt="Work 22"></div>
+      <div class="work" data-src="img/23.jpg"><img src="img/23.jpg" alt="Work 23"></div>
+      <div class="work" data-src="img/24.jpg"><img src="img/24.jpg" alt="Work 24"></div>
+      <div class="work" data-src="img/25.jpg"><img src="img/25.jpg" alt="Work 25"></div>
+      <div class="work" data-src="img/26.jpg"><img src="img/26.jpg" alt="Work 26"></div>
+      <div class="work" data-src="img/27.jpg"><img src="img/27.jpg" alt="Work 27"></div>
+      <div class="work" data-src="img/28.jpg"><img src="img/28.jpg" alt="Work 28"></div>
+      <div class="work" data-src="img/29.jpg"><img src="img/29.jpg" alt="Work 29"></div>
+      <div class="work" data-src="img/30.jpg"><img src="img/30.jpg" alt="Work 30"></div>
+      <div class="work" data-src="img/31.jpg"><img src="img/31.jpg" alt="Work 31"></div>
+      <div class="work" data-src="img/32.jpg"><img src="img/32.jpg" alt="Work 32"></div>
+      <div class="work" data-src="img/33.jpg"><img src="img/33.jpg" alt="Work 33"></div>
+      <div class="work" data-src="img/34.jpg"><img src="img/34.jpg" alt="Work 34"></div>
+      <div class="work" data-src="img/35.jpg"><img src="img/35.jpg" alt="Work 35"></div>
+      <div class="work" data-src="img/36.jpg"><img src="img/36.jpg" alt="Work 36"></div>
+      <div class="work" data-src="img/37.jpg"><img src="img/37.jpg" alt="Work 37"></div>
+      <div class="work" data-src="img/38.jpg"><img src="img/38.jpg" alt="Work 38"></div>
+      <div class="work" data-src="img/39.jpg"><img src="img/39.jpg" alt="Work 39"></div>
+      <div class="work" data-src="img/40.jpg"><img src="img/40.jpg" alt="Work 40"></div>
+      <div class="work" data-src="img/41.jpg"><img src="img/41.jpg" alt="Work 41"></div>
+      <div class="work" data-src="img/42.jpg"><img src="img/42.jpg" alt="Work 42"></div>
     </div>
   </section>
 
-  <footer class="animate">
+  <footer>
     <p>© 2025 Opustraza Studio</p>
     <p><a href="mailto:CONTACT@OPUSTRAZA.COM" class="email">CONTACT@OPUSTRAZA.COM</a></p>
   </footer>
@@ -266,77 +283,6 @@
   </div>
 
   <script>
-  // Aparecer secciones al cargar
-  document.addEventListener('DOMContentLoaded', () => {
-    const animated = document.querySelectorAll('.animate');
-    animated.forEach((el, i) => {
-      setTimeout(() => el.classList.add('appear'), i * 200);
-    });
-
-    // 📁 Galería automática
-    const portfolioContainer = document.getElementById('portfolio-container');
-    const imgFolder = 'img/';
-    
-    // 👇 Lista de imágenes
-    const imageFiles = [
-  '1.jpg',
-  '2.jpg',
-  '3.jpg',
-  '4.jpg',
-  '5.jpg',
-  '6.jpg',
-  '7.jpg',
-  '8.jpg',
-  '9.jpg',
-  '10.jpg',
-  '11.jpg',
-  '12.jpg',
-  '13.jpg',
-  '14.jpg',
-  '15.jpg',
-  '16.jpg',
-  '17.jpg',
-  '18.jpg',
-  '19.jpg',
-  '20.jpg',
-  '21.jpg',
-  '22.jpg',
-  '23.jpg',
-  '24.jpg',
-  '25.jpg',
-  '26.jpg',
-  '27.jpg',
-  '28.jpg',
-  '29.jpg',
-  '30.jpg',
-  '31.jpg',
-  '32.jpg',
-  '33.jpg',
-  '34.jpg',
-  '35.jpg',
-  '36.jpg',
-  '37.jpg',
-  '38.jpg',
-  '39.jpg',
-  '40.jpg',
-  '41.jpg',
-  '42.jpg'
-		//Get-ChildItem *.jpg | ForEach-Object { "  '$($_.Name)'," }    Get-ChildItem -Path "F:\OPUSTRAZA\Portafolio Agente\Portafolio Agent\Mini" -Filter *.jpg | ForEach-Object { "  '$($_.Name)'," } 
-    ];
-
-    imageFiles.forEach(filename => {
-      const work = document.createElement('div');
-      work.className = 'work';
-      work.setAttribute('data-src', imgFolder + filename);
-      
-      const img = document.createElement('img');
-      img.src = imgFolder + filename;
-      img.alt = filename.replace('.jpg', '').replace(/_/g, ' ');  // ✅ Corregido aquí
-      
-      work.appendChild(img);
-      portfolioContainer.appendChild(work);
-    });
-
     // Lightbox
     document.querySelectorAll('.work').forEach(work => {
       work.addEventListener('click', () => {
@@ -372,5 +318,6 @@
         });
       });
     });
-  });
-</script>
+  </script>
+</body>
+</html>
