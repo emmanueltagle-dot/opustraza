@@ -1,146 +1,266 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Opustraza — The Opus of the Line</title>
+  <title>Opustraza — Illustration & Graphic Narrative</title>
+  <meta name="description" content="Opustraza Studio — Where every stroke becomes an opus.">
   <style>
+    :root {
+      --text: #111;
+      --bg: #fff;
+      --accent: #000;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #fff;
-      color: #111;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    .hero {
-      max-width: 800px;
-      padding: 3rem 2rem;
-      animation: fadeInUp 1.4s ease-out forwards;
+    /* Animation base */
+    .animate {
       opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .animate.appear {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    header {
+      padding: 4rem 1.5rem 2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
     }
-
-    .hero h1 {
+    h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 3.5rem;
-      font-weight: 700;
-      margin: 0;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
       letter-spacing: -0.5px;
-      color: #000;
-      position: relative;
-      display: inline-block;
     }
-
-    .hero h1::after {
+    .tagline {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+    nav {
+      margin: 2rem 0;
+    }
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      position: relative;
+    }
+    nav a::after {
       content: '';
       position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: -4px;
+      left: 0;
       width: 0;
-      height: 3px;
-      background: #000;
-      animation: drawLine 1s ease-out forwards;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    nav a:hover::after {
+      width: 100%;
     }
 
-    @keyframes drawLine {
-      to {
-        width: 60%;
-      }
+    section {
+      max-width: 900px;
+      margin: 4rem auto 0;
+      padding: 0 1.5rem;
     }
-
-    .hero p.tagline {
-      font-family: 'Lato', sans-serif;
-      font-style: italic;
-      font-size: 1.4rem;
-      color: #444;
-      margin: 0.5rem 0 2rem;
-      opacity: 0;
-      animation: fadeIn 1s ease-out 0.6s forwards;
+    section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
     }
-
-    .hero p.description {
-      font-size: 1.1rem;
-      margin: 1.5rem 0;
+    .about-content {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.05rem;
       color: #222;
-      opacity: 0;
-      animation: fadeIn 1s ease-out 0.8s forwards;
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1.5rem;
+    }
+    .work {
+      cursor: pointer;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.25s ease;
+    }
+    .work:hover {
+      transform: translateY(-4px);
+    }
+    .work img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
-    .cta-button {
-      display: inline-block;
-      background-color: #000;
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.92);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border: 2px solid white;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    a.email {
+      color: var(--accent);
       text-decoration: none;
-      font-size: 1rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      opacity: 0;
-      animation: fadeIn 1s ease-out 1s forwards;
     }
 
-    .cta-button:hover {
-      background-color: #333;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-      .hero p.tagline {
-        font-size: 1.2rem;
-      }
-      .hero p.description {
-        font-size: 1rem;
-      }
-      .hero {
-        padding: 2rem 1.5rem;
-      }
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      nav a { display: block; margin: 0.8rem 0; }
     }
   </style>
-  <!-- Fuentes de Google -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:ital,wght@0,300;1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="hero">
+  <header class="animate" style="animation-delay: 0.1s;">
     <h1>OPUSTRAZA</h1>
     <p class="tagline">“The Opus of the Line”</p>
-    <p class="description">
-      Opustraza Studio — Where every stroke becomes an opus. Illustration & Graphic Narrative for comics, storytelling, and visual art.
-    </p>
-    <a href="mailto:CONTACT@OPUSTRAZA.COM" class="cta-button">CONTACT@OPUSTRAZA.COM</a>
+    <nav>
+      <a href="#clients">Clients</a>
+      <a href="#portfolio">Portfolio</a>
+    </nav>
+  </header>
+
+  <section id="clients" class="animate" style="animation-delay: 0.3s;">
+    <h2>Clients</h2>
+    <div class="about-content">
+      <p>
+        I have collaborated with publishers on illustration, graphic narrative, and sequential art projects.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; margin-top: 1.5rem; font-weight: 500; color: #000;">
+        <span>• Les Éditions Le Lombard</span>
+        <span>• Éditions Dargaud</span>
+        <span>• Éditions Dupuis</span>
+	<span>• Zhepyr Éditions  </span>
+	<span>• Éditions Clair de Lune</span>
+	<span>• Bamboo Édition</span>
+        <!-- Replace or add your real clients here -->
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="animate" style="animation-delay: 0.5s;">
+    <h2>Portfolio</h2>
+    <div class="portfolio-grid" id="portfolio-container">
+      <div class="work" data-src="img/01.jpg"><img src="img/01-thumb.jpg" alt="Work 1"></div>
+      <div class="work" data-src="img/02.jpg"><img src="img/02-thumb.jpg" alt="Work 2"></div>
+      <div class="work" data-src="img/03.jpg"><img src="img/03-thumb.jpg" alt="Work 3"></div>
+      <!-- Add more works as needed -->
+    </div>
+  </section>
+
+  <footer class="animate" style="animation-delay: 0.7s;">
+    <p>© 2025 Opustraza Studio</p>
+    <p><a href="mailto:CONTACT@OPUSTRAZA.COM" class="email">CONTACT@OPUSTRAZA.COM</a></p>
+  </footer>
+
+  <div class="lightbox" id="lightbox">
+    <span class="close" id="close">&times;</span>
+    <img id="lightbox-img" src="" alt="View full work">
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const animated = document.querySelectorAll('.animate');
+      animated.forEach((el, i) => {
+        setTimeout(() => el.classList.add('appear'), i * 150);
+      });
+    });
+
+    const works = document.querySelectorAll('.work');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('close');
+
+    works.forEach(work => {
+      work.addEventListener('click', () => {
+        lightboxImg.src = work.getAttribute('data-src');
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        window.scrollTo({
+          top: target.offsetTop - 60,
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
 </body>
 </html>
