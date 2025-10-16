@@ -20,37 +20,76 @@
       overflow-x: hidden;
     }
 
-    /* Animation base */
-    .animate {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .animate.appear {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    header {
-      padding: 4rem 1.5rem 2rem;
+    /* Hero con efectos elegantes */
+    .hero {
       text-align: center;
       max-width: 800px;
       margin: 0 auto;
+      padding: 4rem 1.5rem 2rem;
     }
-    h1 {
+    .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      margin-bottom: 0.5rem;
+      font-size: 3.2rem;
+      font-weight: 700;
+      margin: 0;
       letter-spacing: -0.5px;
+      position: relative;
+      display: inline-block;
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
     }
-    .tagline {
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: var(--accent);
+      animation: drawLine 1s ease-out 0.4s forwards;
+    }
+    .hero .tagline {
+      font-family: 'Lato', sans-serif;
       font-style: italic;
-      color: #555;
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
+      font-size: 1.4rem;
+      color: #444;
+      margin: 0.5rem 0 1.5rem;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.6s forwards;
     }
+    .hero .description {
+      font-size: 1.1rem;
+      margin: 1rem 0 2rem;
+      color: #222;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.8s forwards;
+    }
+    .cta-button {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      opacity: 0;
+      animation: fadeIn 1s ease-out 1s forwards;
+    }
+    .cta-button:hover {
+      background-color: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
     nav {
       margin: 2rem 0;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 1.2s forwards;
     }
     nav a {
       color: var(--accent);
@@ -77,7 +116,15 @@
       max-width: 900px;
       margin: 4rem auto 0;
       padding: 0 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
     }
+    section.appear {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
     section h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
@@ -153,6 +200,8 @@
       border-top: 1px solid #eee;
       color: #666;
       font-size: 0.95rem;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 1.4s forwards;
     }
     a.email {
       color: var(--accent);
@@ -160,54 +209,64 @@
       font-weight: 600;
     }
 
-    @media (max-width: 600px) {
-      h1 { font-size: 2.2rem; }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes drawLine {
+      to { width: 60%; }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .hero .tagline { font-size: 1.2rem; }
       .portfolio-grid { grid-template-columns: 1fr; }
       nav a { display: block; margin: 0.8rem 0; }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:ital,wght@0,300;1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <header class="animate" style="animation-delay: 0.1s;">
+  <header class="hero">
     <h1>OPUSTRAZA</h1>
     <p class="tagline">“The Opus of the Line”</p>
+    <p class="description">
+      Opustraza Studio — Where every stroke becomes an opus. Illustration & Graphic Narrative for comics, storytelling, and visual art.
+    </p>
+    <a href="mailto:CONTACT@OPUSTRAZA.COM" class="cta-button">CONTACT@OPUSTRAZA.COM</a>
     <nav>
       <a href="#clients">Clients</a>
       <a href="#portfolio">Portfolio</a>
     </nav>
   </header>
 
-  <section id="clients" class="animate" style="animation-delay: 0.3s;">
-    <h2>Clients</h2>
-    <div class="about-content">
-      <p>
-        I have collaborated with publishers on illustration, graphic narrative, and sequential art projects.
-      </p>
-      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; margin-top: 1.5rem; font-weight: 500; color: #000;">
-        <span>• Les Éditions Le Lombard</span>
-        <span>• Éditions Dargaud</span>
-        <span>• Éditions Dupuis</span>
-	<span>• Zhepyr Éditions  </span>
-	<span>• Éditions Clair de Lune</span>
-	<span>• Bamboo Édition</span>
-        <!-- Replace or add your real clients here -->
-      </div>
+  <section id="clients">
+  <h2>Clients</h2>
+  <div class="about-content">
+    <p>
+      I have collaborated with publishers on illustration, graphic narrative, and sequential art projects.
+    </p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; margin-top: 1.5rem; font-weight: 500; color: #000; font-family: 'Inter', sans-serif; font-size: 1.05rem;">
+      <span>• Les Éditions Le Lombard</span>
+      <span>• Éditions Dargaud</span>
+      <span>• Éditions Dupuis</span>
+      <span>• Zhepyr Éditions</span>
+      <span>• Éditions Clair de Lune</span>
+      <span>• Bamboo Édition</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="portfolio" class="animate" style="animation-delay: 0.5s;">
+  <section id="portfolio">
     <h2>Portfolio</h2>
     <div class="portfolio-grid" id="portfolio-container">
       <div class="work" data-src="img/01.jpg"><img src="img/01-thumb.jpg" alt="Work 1"></div>
       <div class="work" data-src="img/02.jpg"><img src="img/02-thumb.jpg" alt="Work 2"></div>
       <div class="work" data-src="img/03.jpg"><img src="img/03-thumb.jpg" alt="Work 3"></div>
-      <!-- Add more works as needed -->
     </div>
   </section>
 
-  <footer class="animate" style="animation-delay: 0.7s;">
+  <footer>
     <p>© 2025 Opustraza Studio</p>
     <p><a href="mailto:CONTACT@OPUSTRAZA.COM" class="email">CONTACT@OPUSTRAZA.COM</a></p>
   </footer>
@@ -218,13 +277,21 @@
   </div>
 
   <script>
+    // Aparecer secciones al hacer scroll (suave y eficiente)
     document.addEventListener('DOMContentLoaded', () => {
-      const animated = document.querySelectorAll('.animate');
-      animated.forEach((el, i) => {
-        setTimeout(() => el.classList.add('appear'), i * 150);
-      });
+      const sections = document.querySelectorAll('section');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('appear');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      sections.forEach(section => observer.observe(section));
     });
 
+    // Lightbox
     const works = document.querySelectorAll('.work');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -250,6 +317,7 @@
       }
     });
 
+    // Smooth scroll
     document.querySelectorAll('nav a').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
