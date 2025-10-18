@@ -458,106 +458,98 @@
     let currentWipIndex = 0;
 
     // Verificar si una imagen existe (solo en entorno real; en prueba usa try/catch)
-    async function imageExists(url) {
-      try {
-        const res = await fetch(url, { method: 'HEAD' });
-        return res.ok;
-      } catch {
-        return false;
-      }
-    }
-
-    // Renderizar proyecto actual
     async function renderWipProject() {
-      const key = wipProjectKeys[currentWipIndex];
-      const basePath = `img/wp/${key}/`;
-      const stages = ['color', 'ink', 'sketch'];
-      const stageFiles = {};
-      let firstAvailable = null;
+  const key = wipProjectKeys[currentWipIndex];
+  const basePath = `img/wp/${key}/`;
+  
+  // Asumimos que sketch.jpg siempre existe
+  const stageFiles = {
+    sketch: `${basePath}sketch.jpg`
+  };
 
-      // Verificar qué etapas existen
-      for (const stage of stages) {
-        const url = `${basePath}${stage}.jpg`;
-        if (await imageExists(url)) {
-          stageFiles[stage] = url;
-          if (!firstAvailable) firstAvailable = stage;
-        }
-      }
+  // Intentamos cargar ink.jpg y color.jpg (sin verificar)
+  stageFiles.ink = `${basePath}ink.jpg`;
+  stageFiles.color = `${basePath}color.jpg`;
 
-      // Títulos descriptivos (personaliza según necesites)
-      const projectTitles = {
-        belgian: "Belgian Revolution",
-        "silent-line": "Silent Line"
+  const projectTitles = {
+    belgian: "Belgian Revolution",
+    "silent-line": "Silent Line"
+  };
+
+  const descriptions = {
+    belgian: "I’m currently working on a very inspiring 74-page graphic novel about the Belgian Revolution.",
+    "silent-line": "A graphic narrative exploring memory and silence in Caribbean post-dictatorship contexts."
+  };
+
+  const html = `
+    <p class="wip-desc">${descriptions[key] || 'Work in progress.'}</p>
+    <p class="wip-meta">— In progress • 2025</p>
+    <div class="wip-image-container" style="margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+      <img 
+        id="wip-main-img"
+        src="${stageFiles.sketch}" 
+        alt="Sketch stage"
+        data-full="${stageFiles.sketch}"
+        style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); cursor: pointer;"
+        onerror="this.style.display='none'; document.querySelector('#wip-content').innerHTML='<p>No image available.</p>'"
+      >
+    </div>
+    <div class="wip-buttons">
+      <button class="wip-btn" data-stage="color" data-img="${stageFiles.color}" data-full="${stageFiles.color}">Color</button>
+      <button class="wip-btn" data-stage="ink" data-img="${stageFiles.ink}" data-full="${stageFiles.ink}">Ink</button>
+      <button class="wip-btn active" data-stage="sketch" data-img="${stageFiles.sketch}" data-full="${stageFiles.sketch}">Sketch</button>
+    </div>
+  `;
+
+  document.getElementById('wip-content').innerHTML = html;
+  document.getElementById('project-title').textContent = projectTitles[key] || key;
+
+  // Actualizar botones de navegación
+  document.getElementById('prev-btn').disabled = currentWipIndex === 0;
+  document.getElementById('next-btn').disabled = currentWipIndex === wipProjectKeys.length - 1;
+
+  // Vincular eventos (solo para imágenes que se carguen)
+  bindWipEvents(stageFiles);
+}
+
+   function bindWipEvents(stageFiles) {
+  const img = document.getElementById('wip-main-img');
+  const buttons = document.querySelectorAll('.wip-btn');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const stage = btn.getAttribute('data-stage');
+      const src = stageFiles[stage];
+      const imgEl = document.getElementById('wip-main-img');
+
+      // Pre-cargar para verificar
+      const testImg = new Image();
+      testImg.onload = () => {
+        imgEl.src = src;
+        imgEl.setAttribute('data-full', src);
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
       };
-
-      const descriptions = {
-        belgian: "I’m currently working on a very inspiring 74-page graphic novel about the Belgian Revolution.",
-        "silent-line": "A graphic narrative exploring memory and silence in Caribbean post-dictatorship contexts."
+      testImg.onerror = () => {
+        alert("Stage not ready yet.");
       };
+      testImg.src = src;
+    });
+  });
 
-      if (!firstAvailable) {
-        document.getElementById('wip-content').innerHTML = `<p>No images available.</p>`;
-        document.getElementById('project-title').textContent = projectTitles[key] || key;
-        return;
-      }
-
-      const html = `
-        <p class="wip-desc">${descriptions[key] || 'Work in progress.'}</p>
-        <p class="wip-meta">— In progress • 2025</p>
-        <div class="wip-image-container" style="margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-          <img 
-            id="wip-main-img"
-            src="${stageFiles[firstAvailable]}" 
-            alt="${firstAvailable} stage"
-            data-full="${stageFiles[firstAvailable]}"
-            style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); cursor: pointer;"
-          >
-        </div>
-        <div class="wip-buttons">
-          ${stages.map(stage => {
-            if (stageFiles[stage]) {
-              const isActive = stage === firstAvailable;
-              return `<button class="wip-btn ${isActive ? 'active' : ''}" data-stage="${stage}" data-img="${stageFiles[stage]}" data-full="${stageFiles[stage]}">${stage.charAt(0).toUpperCase() + stage.slice(1)}</button>`;
-            } else {
-              return `<button class="wip-btn" disabled> ${stage.charAt(0).toUpperCase() + stage.slice(1)} </button>`;
-            }
-          }).join('')}
-        </div>
-      `;
-
-      document.getElementById('wip-content').innerHTML = html;
-      document.getElementById('project-title').textContent = projectTitles[key] || key;
-
-      // Actualizar botones de navegación
-      document.getElementById('prev-btn').disabled = currentWipIndex === 0;
-      document.getElementById('next-btn').disabled = currentWipIndex === wipProjectKeys.length - 1;
-
-      // Vincular eventos
-      bindWipEvents(stageFiles);
-    }
-
-    function bindWipEvents(stageFiles) {
-      const img = document.getElementById('wip-main-img');
-      const buttons = document.querySelectorAll('.wip-btn:not(:disabled)');
-
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const stage = btn.getAttribute('data-stage');
-          const src = stageFiles[stage];
-          img.src = src;
-          img.setAttribute('data-full', src);
-          buttons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
-      });
-
-      img.addEventListener('click', () => {
-        const full = img.getAttribute('data-full');
+  if (img) {
+    img.addEventListener('click', () => {
+      const full = img.getAttribute('data-full');
+      const testImg = new Image();
+      testImg.onload = () => {
         document.getElementById('lightbox-img').src = full;
         document.getElementById('lightbox').classList.add('active');
         document.body.style.overflow = 'hidden';
-      });
-    }
+      };
+      testImg.src = full;
+    });
+  }
+}
 
     // Navegación
     document.getElementById('prev-btn').addEventListener('click', () => {
