@@ -186,36 +186,7 @@
       font-family: 'Lato', sans-serif;
     }
 
-    /* WIP Navigation */
-    .wip-nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1.5rem;
-      margin: 1.5rem 0;
-    }
-    .wip-nav button {
-      background: #f0f0f0;
-      border: 1px solid #ddd;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .wip-nav button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    .wip-nav .project-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    /* WIP Buttons */
+    /* Botones WIP */
     .wip-buttons {
       margin-top: 1.2rem;
       display: flex;
@@ -231,16 +202,15 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
       cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .wip-btn:hover {
+      background: #e0e0e0;
     }
     .wip-btn.active {
       background: var(--accent);
       color: white;
       border-color: var(--accent);
-    }
-    .wip-btn:disabled {
-      background: #eee;
-      color: #999;
-      cursor: not-allowed;
     }
 
     /* Clients */
@@ -363,13 +333,25 @@
   <section id="wip">
     <h2 class="wip-title">Work in Progress</h2>
     <div class="about-content">
-      <div class="wip-nav">
-        <button id="prev-btn">←</button>
-        <div class="project-title" id="project-title">Loading...</div>
-        <button id="next-btn">→</button>
+      <p class="wip-desc">
+        I’m currently working on a very inspiring 74-page graphic novel about the Belgian Revolution. I’ll share more details later on. For now, here’s a small preview as a teaser.
+      </p>
+      <p class="wip-meta">
+        — In progress • 2025
+      </p>
+      <div class="wip-image-container" style="margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <img 
+          id="wip-main-img"
+          src="img/wp/color.jpg" 
+          alt="Color stage" 
+          style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); cursor: pointer;"
+          data-full="img/wp/color.jpg"
+        >
       </div>
-      <div id="wip-content">
-        <!-- Se llena con JS -->
+      <div class="wip-buttons">
+        <button class="wip-btn active" data-img="img/wp/color.jpg" data-full="img/wp/color.jpg">Color</button>
+        <button class="wip-btn" data-img="img/wp/ink.jpg" data-full="img/wp/ink.jpg">Ink</button>        
+        <button class="wip-btn" data-img="img/wp/sketch.jpg" data-full="img/wp/sketch.jpg">Sketch</button>
       </div>
     </div>
   </section>
@@ -451,125 +433,9 @@
   </div>
 
   <script>
-    // ========== WORK IN PROGRESS DYNAMICS ==========
-    // Lista de proyectos (solo nombres de carpetas en img/wp/)
-    const wipProjectKeys = ['Page21V5', 'silent-line']; // ← AÑADE NUEVOS PROYECTOS AQUÍ
-
-    let currentWipIndex = 0;
-
-    // Verificar si una imagen existe (solo en entorno real; en prueba usa try/catch)
-    async function renderWipProject() {
-  const key = wipProjectKeys[currentWipIndex];
-  const basePath = `img/wp/${key}/`;
-  
-  // Asumimos que sketch.jpg siempre existe
-  const stageFiles = {
-    sketch: `${basePath}sketch.jpg`
-  };
-
-  // Intentamos cargar ink.jpg y color.jpg (sin verificar)
-  stageFiles.ink = `${basePath}ink.jpg`;
-  stageFiles.color = `${basePath}color.jpg`;
-
-  const projectTitles = {
-    belgian: "Belgian Revolution",
-    "silent-line": "Silent Line"
-  };
-
-  const descriptions = {
-    belgian: "I’m currently working on a very inspiring 74-page graphic novel about the Belgian Revolution.",
-    "silent-line": "A graphic narrative exploring memory and silence in Caribbean post-dictatorship contexts."
-  };
-
-  const html = `
-    <p class="wip-desc">${descriptions[key] || 'Work in progress.'}</p>
-    <p class="wip-meta">— In progress • 2025</p>
-    <div class="wip-image-container" style="margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-      <img 
-        id="wip-main-img"
-        src="${stageFiles.sketch}" 
-        alt="Sketch stage"
-        data-full="${stageFiles.sketch}"
-        style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); cursor: pointer;"
-        onerror="this.style.display='none'; document.querySelector('#wip-content').innerHTML='<p>No image available.</p>'"
-      >
-    </div>
-    <div class="wip-buttons">
-      <button class="wip-btn" data-stage="color" data-img="${stageFiles.color}" data-full="${stageFiles.color}">Color</button>
-      <button class="wip-btn" data-stage="ink" data-img="${stageFiles.ink}" data-full="${stageFiles.ink}">Ink</button>
-      <button class="wip-btn active" data-stage="sketch" data-img="${stageFiles.sketch}" data-full="${stageFiles.sketch}">Sketch</button>
-    </div>
-  `;
-
-  document.getElementById('wip-content').innerHTML = html;
-  document.getElementById('project-title').textContent = projectTitles[key] || key;
-
-  // Actualizar botones de navegación
-  document.getElementById('prev-btn').disabled = currentWipIndex === 0;
-  document.getElementById('next-btn').disabled = currentWipIndex === wipProjectKeys.length - 1;
-
-  // Vincular eventos (solo para imágenes que se carguen)
-  bindWipEvents(stageFiles);
-}
-
-   function bindWipEvents(stageFiles) {
-  const img = document.getElementById('wip-main-img');
-  const buttons = document.querySelectorAll('.wip-btn');
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const stage = btn.getAttribute('data-stage');
-      const src = stageFiles[stage];
-      const imgEl = document.getElementById('wip-main-img');
-
-      // Pre-cargar para verificar
-      const testImg = new Image();
-      testImg.onload = () => {
-        imgEl.src = src;
-        imgEl.setAttribute('data-full', src);
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      };
-      testImg.onerror = () => {
-        alert("Stage not ready yet.");
-      };
-      testImg.src = src;
-    });
-  });
-
-  if (img) {
-    img.addEventListener('click', () => {
-      const full = img.getAttribute('data-full');
-      const testImg = new Image();
-      testImg.onload = () => {
-        document.getElementById('lightbox-img').src = full;
-        document.getElementById('lightbox').classList.add('active');
-        document.body.style.overflow = 'hidden';
-      };
-      testImg.src = full;
-    });
-  }
-}
-
-    // Navegación
-    document.getElementById('prev-btn').addEventListener('click', () => {
-      if (currentWipIndex > 0) {
-        currentWipIndex--;
-        renderWipProject();
-      }
-    });
-
-    document.getElementById('next-btn').addEventListener('click', () => {
-      if (currentWipIndex < wipProjectKeys.length - 1) {
-        currentWipIndex++;
-        renderWipProject();
-      }
-    });
-
-    // ========== OTRAS FUNCIONES ==========
     // Aparecer secciones al hacer scroll
     document.addEventListener('DOMContentLoaded', () => {
-      const sections = document.querySelectorAll('section:not(#wip)');
+      const sections = document.querySelectorAll('section');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -585,12 +451,31 @@
           el.classList.add('appear');
         });
       }, 600);
-
-      // Inicializar WIP
-      renderWipProject();
     });
 
-    // Lightbox para Portfolio
+    // --- Work in Progress Buttons ---
+    const wipButtons = document.querySelectorAll('.wip-btn');
+    const wipMainImg = document.getElementById('wip-main-img');
+
+    wipButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const imgSrc = btn.getAttribute('data-img');
+        const fullSrc = btn.getAttribute('data-full');
+        wipMainImg.src = imgSrc;
+        wipMainImg.setAttribute('data-full', fullSrc);
+        wipButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    wipMainImg.addEventListener('click', () => {
+      const fullSrc = wipMainImg.getAttribute('data-full') || wipMainImg.src;
+      document.getElementById('lightbox-img').src = fullSrc;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // --- Lightbox Portfolio ---
     const works = document.querySelectorAll('.work');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
