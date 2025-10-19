@@ -433,25 +433,23 @@
   </div>
 
   <script>
-    // Aparecer secciones al hacer scroll
-    document.addEventListener('DOMContentLoaded', () => {
-      const sections = document.querySelectorAll('section');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('appear');
-          }
-        });
-      }, { threshold: 0.1 });
-      sections.forEach(section => observer.observe(section));
+    // Reemplaza tu código de IntersectionObserver por esto:
+document.addEventListener('DOMContentLoaded', () => {
+  // Aparecer secciones con delay (sin depender del scroll)
+  const sections = document.querySelectorAll('section');
+  sections.forEach((section, i) => {
+    setTimeout(() => {
+      section.classList.add('appear');
+    }, 300 + i * 200);
+  });
 
-      // Aparecer texto de WIP con retraso
-      setTimeout(() => {
-        document.querySelectorAll('#wip .wip-desc, #wip .wip-meta').forEach(el => {
-          el.classList.add('appear');
-        });
-      }, 600);
+  // Aparecer texto de WIP
+  setTimeout(() => {
+    document.querySelectorAll('#wip .wip-desc, #wip .wip-meta').forEach(el => {
+      el.classList.add('appear');
     });
+  }, 600);
+});
 
     // --- Work in Progress Buttons ---
     const wipButtons = document.querySelectorAll('.wip-btn');
